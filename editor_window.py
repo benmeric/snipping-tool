@@ -1462,7 +1462,7 @@ class EkranAlintisiAraci:
 
         # Açık Kaynak ve Lisans Bağlantıları
         links = [
-            (t("link_github"), "https://github.com/"),
+            (t("link_github"), "https://github.com/benmeric/snipping-tool"),
             (t("link_license"), "https://opensource.org/licenses/MIT"),
             (t("link_lens"), "https://lens.google/"),
         ]

@@ -46,12 +46,18 @@ Windows'un yerleşik Ekran Alıntısı Aracı (**Snipping Tool**), görsel arama
 
 ### 🚀 Kurulum ve Çalıştırma
 
-1. **Gerekli Paketleri Yükleyin:**
+1. **Projeyi İndirin / Klonlayın:**
+   ```bash
+   git clone https://github.com/benmeric/snipping-tool.git
+   cd snipping-tool
+   ```
+
+2. **Gerekli Paketleri Yükleyin:**
    ```bash
    pip install -r requirements.txt
    ```
 
-2. **Uygulamayı Başlatın:**
+3. **Uygulamayı Başlatın:**
    - Konsol ile: `Baslat.bat` veya `python main.py`
    - Arka planda sessiz (Sistem Tepsisi): `ArkaPlandaBaslat.vbs`
 
@@ -79,12 +85,18 @@ Windows 11's built-in **Snipping Tool** forces visual searches through **Microso
 
 ### 🚀 Installation & Usage
 
-1. **Install Dependencies:**
+1. **Clone the Repository:**
+   ```bash
+   git clone https://github.com/benmeric/snipping-tool.git
+   cd snipping-tool
+   ```
+
+2. **Install Dependencies:**
    ```bash
    pip install -r requirements.txt
    ```
 
-2. **Run Application:**
+3. **Run Application:**
    - Normal run: double-click `Baslat.bat` or run `python main.py`
    - Silent background mode (System Tray): double-click `ArkaPlandaBaslat.vbs`
 
