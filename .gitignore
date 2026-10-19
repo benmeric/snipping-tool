@@ -1,0 +1,24 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Local user configurations and caches
+config.json
+*.log
+
+# Operating System files
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+.DS_Store
+
+# Temporary recordings / test captures
+*.mp4
+*.avi
+*.mkv
+test_*.jpg
+test_*.png
+scratch/
+temp_*/
