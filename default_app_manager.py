@@ -162,3 +162,101 @@ def open_windows_default_apps_settings():
         os.system("start ms-settings:defaultapps")
     except Exception:
         pass
+
+
+def get_desktop_dir() -> str:
+    """Windows'un gerçek aktif masaüstü klasörünü (OneDrive yönlendirmeleri dahil) döndürür."""
+    try:
+        import ctypes
+        from ctypes import wintypes
+        CSIDL_DESKTOP = 0x0010
+        buf = ctypes.create_unicode_buffer(wintypes.MAX_PATH)
+        ctypes.windll.shell32.SHGetFolderPathW(None, CSIDL_DESKTOP, None, 0, buf)
+        if buf.value and os.path.exists(buf.value):
+            return buf.value
+    except Exception:
+        pass
+
+    user_home = os.path.expanduser("~")
+    for cand in [
+        os.path.join(user_home, "OneDrive", "Masaüstü"),
+        os.path.join(user_home, "OneDrive", "Desktop"),
+        os.path.join(user_home, "Masaüstü"),
+        os.path.join(user_home, "Desktop")
+    ]:
+        if os.path.exists(cand):
+            return cand
+    return os.path.join(user_home, "Desktop")
+
+
+def get_shortcut_path() -> str:
+    desktop = get_desktop_dir()
+    for name in ["Ekran Alıntısı Aracı.lnk", "Snipping Tool.lnk"]:
+        cand = os.path.join(desktop, name)
+        if os.path.exists(cand):
+            return cand
+    try:
+        from i18n import t
+        app_title = t("app_title")
+    except Exception:
+        app_title = "Ekran Alıntısı Aracı"
+    return os.path.join(desktop, f"{app_title}.lnk")
+
+
+def is_desktop_shortcut_existing() -> bool:
+    """Masaüstünde kısayolun var olup olmadığını denetler."""
+    return os.path.exists(get_shortcut_path())
+
+
+def create_desktop_shortcut() -> tuple[bool, str]:
+    """Masaüstüne uygulamanın özel simgeli (.ico) Windows kısayolunu (.lnk) ekler."""
+    try:
+        import subprocess
+        try:
+            from i18n import t
+            app_title = t("app_title")
+            app_desc = t("app_name_full")
+        except Exception:
+            app_title = "Ekran Alıntısı Aracı"
+            app_desc = "Ekran Alıntısı Aracı (Google Lens Destekli)"
+
+        desktop_dir = get_desktop_dir()
+        os.makedirs(desktop_dir, exist_ok=True)
+
+        app_dir = os.path.dirname(os.path.abspath(__file__))
+        main_py = os.path.join(app_dir, "main.py")
+        ico_path = os.path.join(app_dir, "app_icon.ico")
+
+        python_dir = os.path.dirname(sys.executable)
+        pythonw = os.path.join(python_dir, "pythonw.exe")
+        if not os.path.exists(pythonw):
+            pythonw = sys.executable
+
+        shortcut_name = f"{app_title}.lnk"
+        shortcut_path = os.path.join(desktop_dir, shortcut_name)
+
+        ps_cmd = (
+            f"$WshShell = New-Object -ComObject WScript.Shell; "
+            f"$Shortcut = $WshShell.CreateShortcut('{shortcut_path}'); "
+            f"$Shortcut.TargetPath = '{pythonw}'; "
+            f'$Shortcut.Arguments = \'"{main_py}"\'; '
+            f"$Shortcut.WorkingDirectory = '{app_dir}'; "
+            f"$Shortcut.IconLocation = '{ico_path},0'; "
+            f"$Shortcut.Description = '{app_desc}'; "
+            f"$Shortcut.Save()"
+        )
+
+        res = subprocess.run(
+            ["powershell", "-NoProfile", "-NonInteractive", "-Command", ps_cmd],
+            capture_output=True,
+            text=True,
+            timeout=8
+        )
+
+        if os.path.exists(shortcut_path):
+            return True, shortcut_path
+        else:
+            return False, res.stderr or "Kısayol oluşturulamadı."
+    except Exception as e:
+        logging.error("Masaüstü kısayolu oluşturulamadı: %s", e)
+        return False, str(e)

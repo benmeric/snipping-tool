@@ -790,7 +790,7 @@ class EkranAlintisiAraci:
         popup = tk.Toplevel(self.root)
         popup.overrideredirect(True)
         popup.attributes("-topmost", True)
-        popup.geometry(f"250x92+{x-80}+{y}")
+        popup.geometry(f"250x130+{x-80}+{y}")
         popup.configure(bg="#202020")
         self.active_popup = popup
 
@@ -827,6 +827,20 @@ class EkranAlintisiAraci:
             command=_toggle_default_action
         )
         btn_def.pack(fill=tk.X, padx=4, pady=(1, 2))
+
+        def _create_shortcut_from_menu():
+            self._close_popup()
+            ok, p = default_app_manager.create_desktop_shortcut()
+            if ok:
+                toast.show(t("app_title"), t("toast_shortcut_success"))
+
+        btn_shortcut = ctk.CTkButton(
+            card, text=f"📌  {t('btn_create_shortcut')}", anchor="w",
+            font=ctk.CTkFont(family="Segoe UI", size=12), text_color="#FFFFFF",
+            fg_color="transparent", hover_color="#383838", height=34, corner_radius=4,
+            command=_create_shortcut_from_menu
+        )
+        btn_shortcut.pack(fill=tk.X, padx=4, pady=(1, 2))
 
     def _toggle_mode_menu(self):
         if self.active_popup:
@@ -1417,6 +1431,58 @@ class EkranAlintisiAraci:
             btn_link_default_apps.pack(side=tk.LEFT, padx=8, pady=4)
 
         _add_default_app_card()
+
+        def _add_desktop_shortcut_card():
+            card = ctk.CTkFrame(scroll, fg_color="#282828", border_width=1, border_color="#363636", corner_radius=6)
+            card.pack(fill=tk.X, pady=3)
+
+            row = ctk.CTkFrame(card, fg_color="transparent")
+            row.pack(fill=tk.X, padx=12, pady=10)
+
+            shortcut_exists = default_app_manager.is_desktop_shortcut_existing()
+
+            def _create_shortcut():
+                ok, path_or_err = default_app_manager.create_desktop_shortcut()
+                if ok:
+                    btn_add.configure(
+                        text=t("btn_shortcut_created"),
+                        fg_color="#107C41",
+                        hover_color="#0F703B"
+                    )
+                    toast.show(t("app_title"), t("toast_shortcut_success"))
+                else:
+                    messagebox.showerror(t("app_title"), f"Kısayol oluşturulamadı:\n{path_or_err}")
+
+            btn_add = ctk.CTkButton(
+                row,
+                text=t("btn_shortcut_created") if shortcut_exists else t("btn_create_shortcut"),
+                font=ctk.CTkFont(family="Segoe UI", size=12, weight="bold"),
+                fg_color="#107C41" if shortcut_exists else "#0078D4",
+                hover_color="#0F703B" if shortcut_exists else "#0063B1",
+                corner_radius=6, height=32, width=140,
+                command=_create_shortcut
+            )
+            btn_add.pack(side=tk.RIGHT, padx=(10, 0))
+
+            t_box = ctk.CTkFrame(row, fg_color="transparent")
+            t_box.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+
+            t_lbl = ctk.CTkLabel(
+                t_box, text=t("set_desktop_shortcut_title"),
+                font=ctk.CTkFont(family="Segoe UI", size=13, weight="bold"), text_color="#FFFFFF",
+                anchor="w", wraplength=340, justify="left"
+            )
+            t_lbl.pack(fill=tk.X)
+
+            d_lbl = ctk.CTkLabel(
+                t_box, text=t("set_desktop_shortcut_desc"),
+                font=ctk.CTkFont(family="Segoe UI", size=11), text_color="#9E9E9E",
+                anchor="w", wraplength=340, justify="left"
+            )
+            d_lbl.pack(fill=tk.X, pady=(2, 0))
+
+        _add_desktop_shortcut_card()
+
 
         sc_card = ctk.CTkFrame(scroll, fg_color="#282828", border_width=1, border_color="#363636", corner_radius=6)
         sc_card.pack(fill=tk.X, pady=3)
