@@ -29,6 +29,7 @@ import i18n
 from i18n import t
 from config import config
 import default_app_manager
+import autostart
 from notification import toast
 from google_lens import search_image_in_google_lens
 from screen_capture import copy_image_to_clipboard, play_shutter_sound
@@ -790,7 +791,7 @@ class EkranAlintisiAraci:
         popup = tk.Toplevel(self.root)
         popup.overrideredirect(True)
         popup.attributes("-topmost", True)
-        popup.geometry(f"250x130+{x-80}+{y}")
+        popup.geometry(f"250x176+{x-80}+{y}")
         popup.configure(bg="#202020")
         self.active_popup = popup
 
@@ -841,6 +842,22 @@ class EkranAlintisiAraci:
             command=_create_shortcut_from_menu
         )
         btn_shortcut.pack(fill=tk.X, padx=4, pady=(1, 2))
+
+        def _quit_completely():
+            self._close_popup()
+            self.root.destroy()
+            os._exit(0)
+
+        sep_q = ctk.CTkFrame(card, height=1, fg_color="#333333")
+        sep_q.pack(fill=tk.X, padx=6, pady=3)
+
+        btn_quit = ctk.CTkButton(
+            card, text=f"🚪  {t('menu_quit_app')}", anchor="w",
+            font=ctk.CTkFont(family="Segoe UI", size=12), text_color="#FF6B6B",
+            fg_color="transparent", hover_color="#383838", height=32, corner_radius=4,
+            command=_quit_completely
+        )
+        btn_quit.pack(fill=tk.X, padx=4, pady=(1, 3))
 
     def _toggle_mode_menu(self):
         if self.active_popup:
@@ -1482,6 +1499,68 @@ class EkranAlintisiAraci:
             d_lbl.pack(fill=tk.X, pady=(2, 0))
 
         _add_desktop_shortcut_card()
+
+        def _add_autostart_card():
+            card = ctk.CTkFrame(scroll, fg_color="#282828", border_width=1, border_color="#363636", corner_radius=6)
+            card.pack(fill=tk.X, pady=3)
+
+            top_row = ctk.CTkFrame(card, fg_color="transparent")
+            top_row.pack(fill=tk.X, padx=12, pady=10)
+
+            is_auto = autostart.is_autostart_enabled()
+
+            def _toggle_auto():
+                is_on = sw.get() == 1
+                autostart.set_autostart(is_on)
+                sw.configure(text=t("switch_on") if is_on else t("switch_off"))
+                if is_on:
+                    lbl_status.configure(text=t("set_autostart_status_active"), text_color="#60CDFF")
+                    toast.show(t("app_title"), t("toast_autostart_on"))
+                else:
+                    lbl_status.configure(text=t("set_autostart_status_inactive"), text_color="#888888")
+                    toast.show(t("app_title"), t("toast_autostart_off"))
+
+            sw = ctk.CTkSwitch(
+                top_row, text=t("switch_on") if is_auto else t("switch_off"),
+                progress_color="#60CDFF", button_color="#FFFFFF", button_hover_color="#E0E0E0",
+                fg_color="#383838", switch_width=44, switch_height=22,
+                font=ctk.CTkFont(family="Segoe UI", size=12), text_color="#FFFFFF",
+                command=_toggle_auto
+            )
+            if is_auto:
+                sw.select()
+            else:
+                sw.deselect()
+            sw.pack(side=tk.RIGHT, padx=(6, 0))
+
+            t_box = ctk.CTkFrame(top_row, fg_color="transparent")
+            t_box.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+
+            t_lbl = ctk.CTkLabel(
+                t_box, text=t("set_autostart_title"),
+                font=ctk.CTkFont(family="Segoe UI", size=13, weight="bold"), text_color="#FFFFFF",
+                anchor="w", wraplength=340, justify="left"
+            )
+            t_lbl.pack(fill=tk.X)
+
+            d_lbl = ctk.CTkLabel(
+                t_box, text=t("set_autostart_desc"),
+                font=ctk.CTkFont(family="Segoe UI", size=11), text_color="#9E9E9E",
+                anchor="w", wraplength=340, justify="left"
+            )
+            d_lbl.pack(fill=tk.X, pady=(2, 4))
+
+            lbl_status = ctk.CTkLabel(
+                t_box,
+                text=t("set_autostart_status_active") if is_auto else t("set_autostart_status_inactive"),
+                font=ctk.CTkFont(family="Segoe UI", size=11, weight="bold"),
+                text_color="#60CDFF" if is_auto else "#888888",
+                anchor="w"
+            )
+            lbl_status.pack(fill=tk.X)
+
+        _add_autostart_card()
+
 
 
         sc_card = ctk.CTkFrame(scroll, fg_color="#282828", border_width=1, border_color="#363636", corner_radius=6)

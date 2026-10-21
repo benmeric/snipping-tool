@@ -44,6 +44,7 @@ Windows'un yerleşik Ekran Alıntısı Aracı (**Snipping Tool**), görsel arama
 | 📋 **Akıllı Pano Çakışma Önleyici** | Web sitelerine ve yapay zekaya yapıştırırken oluşan dosya ismi çakışmalarını önleyen zaman damgalı çoklu format (`CF_HDROP`, `CF_PNG`, `CF_DIB`) desteği. |
 | ⚡ **Varsayılan Ekran Alıntısı Aracı** | Tek tıkla Windows'un yerleşik Snipping Tool'u yerine varsayılan araç olarak atanır. `PrtScn`, `Win+Shift+S` ve `ms-screenclip:` protokollerini doğrudan devralır. |
 | 📌 **Masaüstü Kısayolu Entegrasyonu** | Ayarlar veya araç çubuğundan tek tıkla uygulamanın özel simgeli (.ico) kısayolunu masaüstünüze ekler. |
+| 🚀 **Windows Açılışında Otomatik Başlama** | Bilgisayar açıldığında arka planda sessizce hazır başlar; PrtScn tuşu ve kısayollar 7/24 anında kullanılabilir. |
 | 🎨 **Windows 11 Fluent Tasarım** | Koyu/Açık tema, akrilik derinlik, çizim araçları (Kalem, Şeffaf Vurgulayıcı, Silgi), gecikmeli çekim ve sistem tepsisinde 0% CPU kullanımı. |
 
 ### 🚀 Kurulum ve Çalıştırma
@@ -85,6 +86,7 @@ Windows 11's built-in **Snipping Tool** forces visual searches through **Microso
 | 📋 **Smart Conflict-Free Clipboard** | Multi-format clipboard support (`CF_HDROP`, `CF_PNG`, `CF_DIB`) with millisecond timestamps to prevent AI chat image collisions. |
 | ⚡ **Windows Default Snipping Tool** | One-click setup as the native default snipping tool in Windows. Intercepts `PrtScn`, `Win+Shift+S`, and the `ms-screenclip:` protocol natively. |
 | 📌 **Desktop Shortcut Integration** | One-click creation of a custom-icon (.ico) Windows shortcut on your desktop directly from settings or toolbar. |
+| 🚀 **Run on Windows Startup** | Silently starts in the background on computer boot, keeping PrtScn and hotkeys ready 24/7. |
 | 🎨 **Windows 11 Fluent Design** | Dark & Light modes, acrylic glassmorphism, customizable snip borders, drawing tools (Pen, Highlighter, Eraser), and 0% idle CPU tray daemon. |
 
 ### 🚀 Installation & Usage

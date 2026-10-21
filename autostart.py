@@ -21,7 +21,7 @@ def get_startup_command() -> str:
         pythonw = sys.executable
 
     script_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "main.py")
-    return f'"{pythonw}" "{script_path}"'
+    return f'"{pythonw}" "{script_path}" --startup'
 
 
 def is_autostart_enabled() -> bool:
