@@ -1,5 +1,5 @@
 @echo off
-title Ekran Alintisi Araci (Google Lens)
+title Snipping Tool (Google Lens)
 cd /d "%~dp0"
 start pythonw main.py
 exit

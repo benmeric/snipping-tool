@@ -96,10 +96,10 @@ pip install -r requirements.txt
   ```bash
   python main.py
   ```
-  *(or double-click `Baslat.bat`)*
+  *(or double-click `Start.bat` / `SnippingTool.bat`)*
 
 - **Silent Background Launch (System Tray):**
-  Double-click `ArkaPlandaBaslat.vbs` to run silently without opening a terminal window.
+  Double-click `StartBackground.vbs` to run silently in the background without opening a terminal window.
 
 ---
 
