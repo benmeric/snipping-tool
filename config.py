@@ -44,7 +44,9 @@ DEFAULT_CONFIG = {
     "app_theme": "dark",
     "app_language": "system",
     "google_lens_enabled": True,
-    "play_sound": True
+    "play_sound": True,
+    "is_default_snipper": False,
+    "intercept_print_screen": True
 }
 
 

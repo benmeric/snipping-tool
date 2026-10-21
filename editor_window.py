@@ -28,6 +28,8 @@ import icon_assets
 import i18n
 from i18n import t
 from config import config
+import default_app_manager
+from notification import toast
 from google_lens import search_image_in_google_lens
 from screen_capture import copy_image_to_clipboard, play_shutter_sound
 from snipping_overlay import open_snipper
@@ -788,7 +790,7 @@ class EkranAlintisiAraci:
         popup = tk.Toplevel(self.root)
         popup.overrideredirect(True)
         popup.attributes("-topmost", True)
-        popup.geometry(f"160x52+{x}+{y}")
+        popup.geometry(f"250x92+{x-80}+{y}")
         popup.configure(bg="#202020")
         self.active_popup = popup
 
@@ -800,12 +802,31 @@ class EkranAlintisiAraci:
             self._build_settings_ui()
 
         btn_settings = ctk.CTkButton(
-            card, text=t("btn_settings"), anchor="w",
+            card, text=f"⚙  {t('btn_settings')}", anchor="w",
             font=ctk.CTkFont(family="Segoe UI", size=13), text_color="#FFFFFF",
             fg_color="transparent", hover_color="#383838", height=38, corner_radius=4,
             command=_go_settings
         )
-        btn_settings.pack(fill=tk.X, padx=4, pady=2)
+        btn_settings.pack(fill=tk.X, padx=4, pady=(2, 1))
+
+        def _toggle_default_action():
+            self._close_popup()
+            curr = default_app_manager.is_default_snipping_tool()
+            ok, msg = default_app_manager.set_as_default_snipping_tool(not curr)
+            if not curr:
+                toast.show(t("app_title"), t("set_default_app_success"))
+            else:
+                toast.show(t("app_title"), t("set_default_app_removed"))
+
+        is_def = default_app_manager.is_default_snipping_tool()
+        def_icon = "✓ " if is_def else "★ "
+        btn_def = ctk.CTkButton(
+            card, text=f"{def_icon}{t('set_default_app_title')}", anchor="w",
+            font=ctk.CTkFont(family="Segoe UI", size=12), text_color="#60CDFF" if is_def else "#E0E0E0",
+            fg_color="transparent", hover_color="#383838", height=36, corner_radius=4,
+            command=_toggle_default_action
+        )
+        btn_def.pack(fill=tk.X, padx=4, pady=(1, 2))
 
     def _toggle_mode_menu(self):
         if self.active_popup:
@@ -1320,9 +1341,83 @@ class EkranAlintisiAraci:
         )
 
         # ---------------------------------------------------------------------
-        # BÖLÜM 3: Kısayollar
+        # BÖLÜM 3: Kısayollar ve Varsayılan Ekran Alıntısı Aracı
         # ---------------------------------------------------------------------
         _add_section_header(t("sec_shortcuts"))
+
+        def _add_default_app_card():
+            card = ctk.CTkFrame(scroll, fg_color="#282828", border_width=1, border_color="#363636", corner_radius=6)
+            card.pack(fill=tk.X, pady=3)
+
+            top_row = ctk.CTkFrame(card, fg_color="transparent")
+            top_row.pack(fill=tk.X, padx=12, pady=10)
+
+            is_def = default_app_manager.is_default_snipping_tool()
+
+            def _toggle_default():
+                is_on = sw.get() == 1
+                ok, msg = default_app_manager.set_as_default_snipping_tool(is_on)
+                sw.configure(text=t("switch_on") if is_on else t("switch_off"))
+                if is_on:
+                    lbl_status.configure(text=t("set_default_app_status_active"), text_color="#60CDFF")
+                    toast.show(t("app_title"), t("set_default_app_success"))
+                else:
+                    lbl_status.configure(text=t("set_default_app_status_inactive"), text_color="#888888")
+                    toast.show(t("app_title"), t("set_default_app_removed"))
+
+            sw = ctk.CTkSwitch(
+                top_row, text=t("switch_on") if is_def else t("switch_off"),
+                progress_color="#60CDFF", button_color="#FFFFFF", button_hover_color="#E0E0E0",
+                fg_color="#383838", switch_width=44, switch_height=22,
+                font=ctk.CTkFont(family="Segoe UI", size=12), text_color="#FFFFFF",
+                command=_toggle_default
+            )
+            if is_def:
+                sw.select()
+            else:
+                sw.deselect()
+            sw.pack(side=tk.RIGHT, padx=(6, 0))
+
+            t_box = ctk.CTkFrame(top_row, fg_color="transparent")
+            t_box.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+
+            t_lbl = ctk.CTkLabel(
+                t_box, text=t("set_default_app_title"),
+                font=ctk.CTkFont(family="Segoe UI", size=13, weight="bold"), text_color="#FFFFFF",
+                anchor="w", wraplength=340, justify="left"
+            )
+            t_lbl.pack(fill=tk.X)
+
+            d_lbl = ctk.CTkLabel(
+                t_box, text=t("set_default_app_desc"),
+                font=ctk.CTkFont(family="Segoe UI", size=11), text_color="#9E9E9E",
+                anchor="w", wraplength=340, justify="left"
+            )
+            d_lbl.pack(fill=tk.X, pady=(2, 4))
+
+            lbl_status = ctk.CTkLabel(
+                t_box,
+                text=t("set_default_app_status_active") if is_def else t("set_default_app_status_inactive"),
+                font=ctk.CTkFont(family="Segoe UI", size=11, weight="bold"),
+                text_color="#60CDFF" if is_def else "#888888",
+                anchor="w"
+            )
+            lbl_status.pack(fill=tk.X)
+
+            # Alt Bağlantılar Çubuğu
+            link_row = ctk.CTkFrame(card, fg_color="#222222", corner_radius=4)
+            link_row.pack(fill=tk.X, padx=12, pady=(0, 10))
+
+            btn_link_default_apps = ctk.CTkButton(
+                link_row, text=t("link_windows_default_apps"),
+                font=ctk.CTkFont(family="Segoe UI", size=11, underline=True),
+                text_color="#60CDFF", fg_color="transparent", hover=False, height=26, anchor="w",
+                command=default_app_manager.open_windows_default_apps_settings
+            )
+            btn_link_default_apps.pack(side=tk.LEFT, padx=8, pady=4)
+
+        _add_default_app_card()
+
         sc_card = ctk.CTkFrame(scroll, fg_color="#282828", border_width=1, border_color="#363636", corner_radius=6)
         sc_card.pack(fill=tk.X, pady=3)
 

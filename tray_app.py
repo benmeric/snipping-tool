@@ -1,3 +1,4 @@
+import default_app_manager
 """
 Ekran Alıntısı Aracı - System Tray Application
 ==============================================
@@ -53,6 +54,12 @@ class TrayApp:
     def _toggle_sound(self, icon, item):
         config.toggle("play_sound")
 
+    def _toggle_default_app(self, icon, item):
+        curr = default_app_manager.is_default_snipping_tool()
+        ok, msg = default_app_manager.set_as_default_snipping_tool(not curr)
+        status = t("set_default_app_status_active") if not curr else t("set_default_app_status_inactive")
+        toast.show(t("app_title"), status)
+
     def _toggle_autostart(self, icon, item):
         current = is_autostart_enabled()
         set_autostart(not current)
@@ -105,6 +112,11 @@ class TrayApp:
                 t("tray_sound"),
                 self._toggle_sound,
                 checked=lambda item: config.get("play_sound", True)
+            ),
+            item(
+                t("set_default_app_title"),
+                self._toggle_default_app,
+                checked=lambda item: default_app_manager.is_default_snipping_tool()
             ),
             item(
                 t("tray_autostart"),
