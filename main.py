@@ -77,22 +77,22 @@ def main():
     # 2. Eğer zaten çalışan bir uygulama örneği varsa, isteği ona ilet ve anında çık
     if is_snip_cmd:
         if send_ipc_command("snip"):
-            logging.info("Çalışan mevcut uygulamaya 'snip' komutu iletildi.")
+            logging.info("Forwarded 'snip' command to active instance.")
             sys.exit(0)
     elif is_video_cmd:
         if send_ipc_command("video"):
-            logging.info("Çalışan mevcut uygulamaya 'video' komutu iletildi.")
+            logging.info("Forwarded 'video' command to active instance.")
             sys.exit(0)
     elif not is_startup:
         # Normal başlatma ama zaten arka planda açıksa öne getir
         if send_ipc_command("show"):
-            logging.info("Uygulama zaten açık, öne getirildi.")
+            logging.info("Application already running, brought to front.")
             sys.exit(0)
 
     # Windows görev çubuğunda python.exe yerine uygulamanın kendi simgesi gözükmesi için App ID ayarla
     icon_assets.setup_windows_app_id()
 
-    logging.info("Ekran Alıntısı Aracı başlatılıyor...")
+    logging.info("Snipping Tool is starting...")
     
     # 3. Ana grafik arayüzünü oluştur
     app = EkranAlintisiAraci()
@@ -108,7 +108,7 @@ def main():
     elif is_startup:
         # Bilgisayar açılışında arka planda sessizce hazır başla
         app.root.withdraw()
-        logging.info("Uygulama Windows başlangıcında arka planda hazır olarak başlatıldı.")
+        logging.info("Application started in background on Windows startup.")
 
     # 6. Print Screen ve video kısayol yöneticisini başlat (Thread-Safe)
     def trigger_snip_safely():

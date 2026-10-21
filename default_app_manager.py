@@ -96,7 +96,7 @@ def set_as_default_snipping_tool(enable: bool = True) -> tuple[bool, str]:
             # 2. Windows RegisteredApplications Tanımı (Varsayılan Programlar Listesi İçin)
             prog_id_key = f"Software\\Classes\\{APP_PROG_ID}"
             with winreg.CreateKey(winreg.HKEY_CURRENT_USER, prog_id_key) as k:
-                winreg.SetValueEx(k, "", 0, winreg.REG_SZ, "Ekran Alıntısı Aracı (Google Lens)")
+                winreg.SetValueEx(k, "", 0, winreg.REG_SZ, "Snipping Tool (Google Lens)")
             with winreg.CreateKey(winreg.HKEY_CURRENT_USER, f"{prog_id_key}\\shell\\open\\command") as k:
                 winreg.SetValueEx(k, "", 0, winreg.REG_SZ, cmd)
 
@@ -104,8 +104,8 @@ def set_as_default_snipping_tool(enable: bool = True) -> tuple[bool, str]:
                 winreg.SetValueEx(k, "ms-screenclip", 0, winreg.REG_SZ, APP_PROG_ID)
 
             with winreg.CreateKey(winreg.HKEY_CURRENT_USER, CAPABILITIES_KEY) as k:
-                winreg.SetValueEx(k, "ApplicationName", 0, winreg.REG_SZ, "Ekran Alıntısı Aracı")
-                winreg.SetValueEx(k, "ApplicationDescription", 0, winreg.REG_SZ, "Google Lens Destekli Ekran Alıntısı Aracı")
+                winreg.SetValueEx(k, "ApplicationName", 0, winreg.REG_SZ, "Snipping Tool")
+                winreg.SetValueEx(k, "ApplicationDescription", 0, winreg.REG_SZ, "Snipping Tool with Google Lens Integration")
 
             with winreg.CreateKey(winreg.HKEY_CURRENT_USER, REGISTERED_APPS_KEY) as k:
                 winreg.SetValueEx(k, "EkranAlintisiAraci", 0, winreg.REG_SZ, CAPABILITIES_KEY)
@@ -124,7 +124,7 @@ def set_as_default_snipping_tool(enable: bool = True) -> tuple[bool, str]:
             config.set("is_default_snipper", True)
             config.set("intercept_print_screen", True)
 
-            return True, "Uygulama başarıyla Windows varsayılan ekran alıntısı aracı olarak ayarlandı."
+            return True, "Application successfully set as the default Windows snipping tool."
 
         else:
             # Kaldırma (Reset)
@@ -141,7 +141,7 @@ def set_as_default_snipping_tool(enable: bool = True) -> tuple[bool, str]:
             config.set("is_default_snipper", False)
             config.set("intercept_print_screen", False)
 
-            return True, "Varsayılan ekran alıntısı aracı ayarı kaldırıldı."
+            return True, "Default snipping tool setting has been removed."
 
     except Exception as e:
         logging.error("Varsayılan araç ayarlanırken hata: %s", e)
@@ -199,7 +199,7 @@ def get_shortcut_path() -> str:
         from i18n import t
         app_title = t("app_title")
     except Exception:
-        app_title = "Ekran Alıntısı Aracı"
+        app_title = "Snipping Tool"
     return os.path.join(desktop, f"{app_title}.lnk")
 
 
@@ -217,8 +217,8 @@ def create_desktop_shortcut() -> tuple[bool, str]:
             app_title = t("app_title")
             app_desc = t("app_name_full")
         except Exception:
-            app_title = "Ekran Alıntısı Aracı"
-            app_desc = "Ekran Alıntısı Aracı (Google Lens Destekli)"
+            app_title = "Snipping Tool"
+            app_desc = "Snipping Tool (Google Lens Integration)"
 
         desktop_dir = get_desktop_dir()
         os.makedirs(desktop_dir, exist_ok=True)

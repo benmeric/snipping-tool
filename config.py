@@ -24,7 +24,7 @@ DEFAULT_CONFIG = {
     "auto_copy_snip": True,
     "auto_save_snip": True,
     "snip_save_dir": default_pics_dir,
-    "snip_filename_prefix": "Ekran_Goruntusu",
+    "snip_filename_prefix": "Screenshot",
     "ask_save_edited_snip": False,
     "multi_window": False,
     "add_border": False,
@@ -42,7 +42,7 @@ DEFAULT_CONFIG = {
 
     # Görünüm ve genel
     "app_theme": "dark",
-    "app_language": "system",
+    "app_language": "en",
     "google_lens_enabled": True,
     "play_sound": True,
     "is_default_snipper": False,

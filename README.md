@@ -1,11 +1,11 @@
 <p align="center">
-  <img src="assets/app_icon.png" width="128" height="128" alt="Ekran Alıntısı Aracı Logo">
+  <img src="assets/app_icon.png" width="128" height="128" alt="Snipping Tool Logo">
 </p>
 
-<h1 align="center">Ekran Alıntısı Aracı (Snipping Tool + Google Lens)</h1>
+<h1 align="center">Snipping Tool (Google Lens & AI Collage)</h1>
 
 <p align="center">
-  <strong>Modern Windows 11 Snipping Tool with Google Lens Integration, AI Image Combiner, Multilingual Support & Screen Recording</strong>
+  <strong>A modern, open-source Windows 11 Snipping Tool alternative with Google Lens visual search, AI multi-image collage combiner, optical character recognition (OCR), screen video recording, and native system integration.</strong>
 </p>
 
 <p align="center">
@@ -18,96 +18,148 @@
 
 ---
 
-## 🌍 Dil Seçimi / Language
-- [Türkçe Dokümantasyon](#-türkçe)
-- [English Documentation](#-english)
+## 📖 Overview
+
+Windows 11's built-in **Snipping Tool** locks visual search strictly to **Microsoft Bing** with no user setting or registry key to change your default search engine to Google.
+
+**Snipping Tool** is a high-performance, open-source desktop utility authored by **Meriç Yüzaklı**. Developed through reverse engineering the Windows 11 Snipping Tool binaries, this application eliminates Bing lock-in by uploading captures directly to the official **Google Lens** web API. In addition, it introduces advanced features missing from the native tool: **AI multi-image collage merging** with numbered reference badges (optimized for ChatGPT, Claude, and Gemini), hardware-accelerated screen video recording with audio, a conflict-free clipboard engine, and one-click integration as the native Windows default snipping tool.
 
 ---
 
-<a name="-türkçe"></a>
-## 🇹🇷 Türkçe
-
-### 📌 Proje Hakkında
-Windows'un yerleşik Ekran Alıntısı Aracı (**Snipping Tool**), görsel aramaları zorunlu olarak **Microsoft Bing** üzerinden yapar ve arama motorunu Google ile değiştirmenize izin vermez. 
-
-**Ekran Alıntısı Aracı**, bu kısıtlamayı aşmak, `Print Screen` tuşuyla aldığınız ekran görüntülerini **doğrudan resmi Google Lens API'si** üzerinden aratmak, yapay zeka modelleri (ChatGPT, Claude, Gemini) için **akıllı görsel birleştirme (kolaj)** yapmak, ekran video kaydı almak ve tam metin tanıma (OCR) sağlamak amacıyla **Meriç Yüzaklı** tarafından geliştirilmiş açık kaynaklı ve bağımsız bir masaüstü uygulamasıdır.
-
-### ✨ Öne Çıkan Özellikler
-
-| Özellik | Açıklama |
-| :--- | :--- |
-| 🔍 **Google Lens Görsel Arama** | Bing zorunluluğu olmadan, ekran alıntılarını doğrudan Google Lens web API'sine yükler ve varsayılan tarayıcınızda arama sonuçlarını açar. |
-| 🧩 **AI Görsel Birleştirici (Kolaj)** | Birden çok ekran görüntüsünü Dikey, Yatay veya Izgara (Grid) düzeninde birleştirir. Yapay zekaya referans verirken görsellere otomatik `[1]`, `[2]`, `[3]` numaralandırma rozetleri ekler. |
-| 🌐 **Çok Dilli Arayüz (i18n)** | Sistem dilini otomatik algılar. Ayarlar menüsünden Türkçe, İngilizce, Almanca, Fransızca, İspanyolca, Rusça, Çince, Japonca ve Korece dilleri arasında anında geçiş yapılabilir. |
-| 🔤 **Google Lens Yapay Zeka OCR** | Ekrandaki metinleri yüksek doğrulukla ayıklar ve doğrudan panoya kopyalar. |
-| 🎥 **Sesli Ekran Video Kaydı** | Mikrofon ve sistem sesi desteğiyle, canlı parlak kırmızı vurgu çerçevesi eşliğinde yüksek kaliteli video kaydı alır. |
-| 📋 **Akıllı Pano Çakışma Önleyici** | Web sitelerine ve yapay zekaya yapıştırırken oluşan dosya ismi çakışmalarını önleyen zaman damgalı çoklu format (`CF_HDROP`, `CF_PNG`, `CF_DIB`) desteği. |
-| ⚡ **Varsayılan Ekran Alıntısı Aracı** | Tek tıkla Windows'un yerleşik Snipping Tool'u yerine varsayılan araç olarak atanır. `PrtScn`, `Win+Shift+S` ve `ms-screenclip:` protokollerini doğrudan devralır. |
-| 📌 **Masaüstü Kısayolu Entegrasyonu** | Ayarlar veya araç çubuğundan tek tıkla uygulamanın özel simgeli (.ico) kısayolunu masaüstünüze ekler. |
-| 🚀 **Windows Açılışında Otomatik Başlama** | Bilgisayar açıldığında arka planda sessizce hazır başlar; PrtScn tuşu ve kısayollar 7/24 anında kullanılabilir. |
-| 🎨 **Windows 11 Fluent Tasarım** | Koyu/Açık tema, akrilik derinlik, çizim araçları (Kalem, Şeffaf Vurgulayıcı, Silgi), gecikmeli çekim ve sistem tepsisinde 0% CPU kullanımı. |
-
-### 🚀 Kurulum ve Çalıştırma
-
-1. **Projeyi İndirin / Klonlayın:**
-   ```bash
-   git clone https://github.com/benmeric/snipping-tool.git
-   cd snipping-tool
-   ```
-
-2. **Gerekli Paketleri Yükleyin:**
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-3. **Uygulamayı Başlatın:**
-   - Konsol ile: `Baslat.bat` veya `python main.py`
-   - Arka planda sessiz (Sistem Tepsisi): `ArkaPlandaBaslat.vbs`
-
----
-
-<a name="-english"></a>
-## 🇬🇧 English
-
-### 📌 About The Project
-Windows 11's built-in **Snipping Tool** forces visual searches through **Microsoft Bing** with no option to switch your default search provider to Google.
-
-**Ekran Alıntısı Aracı** (Snipping Tool) is an open-source, modern desktop application developed by **Meriç Yüzaklı** to overcome this limitation. It enables one-click visual search via **Google Lens**, smart **AI multi-image collage merging** with numbered reference badges, precision OCR, audio-supported screen video recording, and a native Windows 11 Fluent interface.
-
-### ✨ Key Features
+## ✨ Key Features
 
 | Feature | Description |
 | :--- | :--- |
-| 🔍 **Direct Google Lens Search** | Bypasses Bing lock-in. Uploads captures straight to the official Google Lens web endpoint and opens results instantly in your default browser. |
-| 🧩 **AI Image Combiner & Collage** | Merge multiple screenshots vertically, horizontally, or in a 2x2 grid. Automatically stamps `[1]`, `[2]`, `[3]` badges for easy AI prompt referencing (ChatGPT, Claude, Gemini). |
-| 🌐 **Multilingual Support (i18n)** | Auto-detects OS locale with instant switching between English, Turkish, German, French, Spanish, Russian, Chinese, Japanese, and Korean. |
-| 🔤 **AI Optical Character Recognition (OCR)** | Instant and accurate text extraction from any region of the screen directly to your clipboard. |
-| 🎥 **Screen Video Recording with Audio** | High-definition area recording with microphone and system audio support, featuring a live reactive capture frame. |
-| 📋 **Smart Conflict-Free Clipboard** | Multi-format clipboard support (`CF_HDROP`, `CF_PNG`, `CF_DIB`) with millisecond timestamps to prevent AI chat image collisions. |
-| ⚡ **Windows Default Snipping Tool** | One-click setup as the native default snipping tool in Windows. Intercepts `PrtScn`, `Win+Shift+S`, and the `ms-screenclip:` protocol natively. |
-| 📌 **Desktop Shortcut Integration** | One-click creation of a custom-icon (.ico) Windows shortcut on your desktop directly from settings or toolbar. |
-| 🚀 **Run on Windows Startup** | Silently starts in the background on computer boot, keeping PrtScn and hotkeys ready 24/7. |
-| 🎨 **Windows 11 Fluent Design** | Dark & Light modes, acrylic glassmorphism, customizable snip borders, drawing tools (Pen, Highlighter, Eraser), and 0% idle CPU tray daemon. |
-
-### 🚀 Installation & Usage
-
-1. **Clone the Repository:**
-   ```bash
-   git clone https://github.com/benmeric/snipping-tool.git
-   cd snipping-tool
-   ```
-
-2. **Install Dependencies:**
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-3. **Run Application:**
-   - Normal run: double-click `Baslat.bat` or run `python main.py`
-   - Silent background mode (System Tray): double-click `ArkaPlandaBaslat.vbs`
+| 🔍 **Direct Google Lens Search** | Bypasses Bing lock-in. Uploads captures directly to the official Google Lens web endpoint and opens results in your default browser with zero third-party hosts. |
+| 🧩 **AI Image Combiner & Collage** | Merge multiple screenshots vertically, horizontally, or in a 2×2 grid. Automatically stamps `[1]`, `[2]`, `[3]` numbered badges for effortless AI prompt referencing. |
+| ⚡ **Native Windows Default Tool** | One-click setup as the system default. Seamlessly intercepts `PrtScn`, `Win+Shift+S`, and the native Windows `ms-screenclip:` protocol without requiring administrator privileges. |
+| 🖥️ **Desktop Shortcut Integration** | Instantly create a branded Windows shortcut (`.lnk`) with the custom multi-resolution application icon on your desktop from settings or the toolbar. |
+| 🚀 **Run on Windows Startup** | Silently initializes in the background on system boot (`--startup`) with a lightweight system tray daemon and 0% idle CPU utilization. |
+| 🔤 **High-Precision AI OCR** | Extract text instantly from any screen region and copy directly to your clipboard with high accuracy. |
+| 🎥 **Area Video Recording with Audio** | High-definition area video recording supporting both microphone and system loopback audio, highlighted by a live reactive border. |
+| 📋 **Conflict-Free Smart Clipboard** | Multi-format clipboard support (`CF_HDROP`, `CF_PNG`, `CF_DIB`) with millisecond timestamps to prevent image name collisions when pasting into web applications. |
+| 🎨 **Windows 11 Fluent Design** | Sleek acrylic glassmorphism, Dark & Light modes, drawing tools (Pen, Alpha Highlighter, Eraser), custom border styling, and delay timers (3s, 5s, 10s). |
+| 🌐 **Multilingual Interface (i18n)** | Available in English, Turkish, German, Spanish, French, and Russian with instant runtime language switching. |
 
 ---
 
-## 📜 Lisans / License
-Bu proje [MIT Lisansı](LICENSE) altında dağıtılmaktadır. / This project is licensed under the [MIT License](LICENSE).
-Geliştirici / Author: **Meriç Yüzaklı**
+## 🔍 Reverse Engineering Findings
+
+An analysis of the native Windows 11 Snipping Tool binaries (`SnippingTool.Net.RuntimeComponent.dll` and `SnippingToolUI.dll`) revealed the following architectural constraints:
+
+1. **Hardcoded Bing Endpoint:**
+   - Source path: `/_/src/SnippingTool.Net.Core/Services/VisualSearchService.cs`
+   - Internal API: `https://www.bing.com/images/search?view=detailv2&iss=sbiupload&FORM=SBISNP&sbisrc=ImgPicker&idpbck=1`
+   - The native application hardcodes an HTTP POST directly to Bing's visual search server and triggers Microsoft Edge via `Windows.System.Launcher.LaunchUriAsync`. There is no configuration option or registry flag to alter this target.
+
+2. **Google Lens Web API Interfacing:**
+   - Captured images are transmitted via `multipart/form-data` with the `encoded_image` parameter to `https://lens.google.com/v3/upload`.
+   - The Google endpoint responds with an immediate **HTTP 303 See Other**, providing the visual search results URL (`https://www.google.com/search?vsrid=...`) in the `Location` header.
+   - **Privacy Guarantee:** Images are transmitted over TLS directly to Google's official endpoints without passing through any third-party image hosting service (Imgur, Catbox, etc.).
+
+---
+
+## 📊 Comparison with Microsoft Snipping Tool
+
+| Capability | Microsoft Snipping Tool | This Open-Source Tool |
+| :--- | :---: | :---: |
+| **Visual Search Provider** | ❌ Bing Only (Locked) | ✅ **Google Lens (Direct)** |
+| **AI Multi-Image Combiner** | ❌ Not available | ✅ **Vertical, Horizontal, 2×2 Grid** |
+| **AI Reference Badges `[1]`, `[2]`** | ❌ Not available | ✅ **Automatic Numbered Badges** |
+| **System Protocol Override** | Default UWP | ✅ **Native `ms-screenclip:` Handler** |
+| **Hardware Audio Video Recording** | Basic | ✅ **Mic + System Loopback Audio** |
+| **PrtScn Global Interception** | Default Windows hook | ✅ **Sub-20ms Suppressed Hook** |
+| **Single-Instance IPC Daemon** | UWP Process | ✅ **Local Loopback Socket IPC** |
+| **Source Code & Customization** | ❌ Proprietary | ✅ **100% Open Source (MIT)** |
+
+---
+
+## 🚀 Installation & Quick Start
+
+### 1. Prerequisites
+- Windows 11 or Windows 10 (64-bit)
+- Python 3.10 or higher
+
+### 2. Clone the Repository
+```bash
+git clone https://github.com/benmeric/snipping-tool.git
+cd snipping-tool
+```
+
+### 3. Install Dependencies
+```bash
+pip install -r requirements.txt
+```
+
+### 4. Launch Application
+- **Standard UI Launch:**
+  ```bash
+  python main.py
+  ```
+  *(or double-click `Baslat.bat`)*
+
+- **Silent Background Launch (System Tray):**
+  Double-click `ArkaPlandaBaslat.vbs` to run silently without opening a terminal window.
+
+---
+
+## ⚡ Windows System Integration
+
+To set this tool as your default screen capture utility:
+1. Open the application and navigate to **Settings** (`Ctrl + ,` or click the `...` menu).
+2. Under **Shortcuts & System**, toggle **Set as Default Snipping Tool** to **ON**.
+3. Toggle **Start with Windows** to **ON** to ensure the tool is ready immediately upon logging into Windows.
+4. Click **Add to Desktop** to place a branded shortcut on your desktop.
+
+> **How it works:**  
+> The tool registers itself in `HKEY_CURRENT_USER\Software\Classes\ms-screenclip` and `RegisteredApplications`. When `PrtScn`, `Win+Shift+S`, or a hardware pen button triggers a screen clip, Windows delegates the event to this application. If an instance is already running, an IPC signal triggers the capture overlay in under 20 milliseconds without spinning up redundant processes.
+
+---
+
+## ⌨️ Keyboard Shortcuts
+
+| Shortcut | Action |
+| :--- | :--- |
+| **`PrtScn`** or **`Win + Shift + S`** | Take a screen snip (Rectangle, Window, Full Screen, Freeform) |
+| **`Ctrl + Shift + S`** | Take a photo snip |
+| **`Ctrl + Shift + R`** | Start area screen video recording |
+| **`Ctrl + G`** | Search current capture in Google Lens |
+| **`Ctrl + C`** | Copy capture to clipboard |
+| **`Ctrl + S`** | Save image to disk |
+| **`Ctrl + Z`** | Undo drawing action |
+| **`Ctrl + ,`** | Open Settings panel |
+| **`+`** or **`Numpad +`** | Trigger new snip or recording |
+| **`ESC`** | Cancel active overlay |
+
+---
+
+## ⚙️ Configuration (`config.json`)
+
+Settings can be customized directly in the graphical UI or by modifying `config.json`:
+
+```json
+{
+    "app_theme": "dark",
+    "app_language": "en",
+    "google_lens_enabled": true,
+    "is_default_snipper": true,
+    "intercept_print_screen": true,
+    "auto_copy_snip": true,
+    "auto_save_snip": true,
+    "snip_filename_prefix": "Screenshot",
+    "record_mic_default": false,
+    "record_system_audio_default": true,
+    "add_border": false,
+    "hdr_color_fix": false,
+    "play_sound": true,
+    "show_toast_notification": true
+}
+```
+
+---
+
+## 📜 License
+
+This project is licensed under the **MIT License** — see the [LICENSE](LICENSE) file for details.
+
+Developed with ❤️ by **Meriç Yüzaklı**

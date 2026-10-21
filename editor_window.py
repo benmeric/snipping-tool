@@ -1167,13 +1167,13 @@ class EkranAlintisiAraci:
 
             cur_color = config.get("border_color", "#D13438")
             color_swatches = [
-                ("#D13438", "Kırmızı"),
-                ("#000000", "Siyah"),
-                ("#808080", "Gri"),
-                ("#FFFFFF", "Beyaz"),
-                ("#0078D4", "Mavi"),
-                ("#107C41", "Yeşil"),
-                ("#FFB900", "Sarı"),
+                ("#D13438", "Red"),
+                ("#000000", "Black"),
+                ("#808080", "Gray"),
+                ("#FFFFFF", "White"),
+                ("#0078D4", "Blue"),
+                ("#107C41", "Green"),
+                ("#FFB900", "Yellow"),
             ]
 
             swatch_btns = []
@@ -1468,7 +1468,7 @@ class EkranAlintisiAraci:
                     )
                     toast.show(t("app_title"), t("toast_shortcut_success"))
                 else:
-                    messagebox.showerror(t("app_title"), f"Kısayol oluşturulamadı:\n{path_or_err}")
+                    messagebox.showerror(t("app_title"), f"{t('error_save_title')}:\n{path_or_err}")
 
             btn_add = ctk.CTkButton(
                 row,
@@ -2350,10 +2350,10 @@ class EkranAlintisiAraci:
             f"{t('app_title')}\n"
             f"{t('author_credit')}\n\n"
             f"{t('about_desc')}\n\n"
-            "• PrtScn / Win+Shift+S : Snipping / Ekran Alıntısı\n"
-            "• Ctrl+G : Google Lens\n"
-            "• Ctrl+, : Settings / Ayarlar\n"
-            "• Ctrl+C : Copy | Ctrl+S : Save"
+            "• PrtScn / Win+Shift+S : Take a snip\n"
+            "• Ctrl+G : Search with Google Lens\n"
+            "• Ctrl+, : Settings\n"
+            "• Ctrl+C : Copy to clipboard | Ctrl+S : Save file"
         )
 
     def run(self):
