@@ -749,7 +749,7 @@ class EkranAlintisiAraci:
             self._build_settings_ui()
 
         btn_settings = ctk.CTkButton(
-            card, text=f"⚙  {t('btn_settings')}", anchor="w",
+            card, text=t("btn_settings"), anchor="w",
             font=ctk.CTkFont(family="Segoe UI", size=13), text_color="#FFFFFF",
             fg_color="transparent", hover_color="#383838", height=38, corner_radius=4,
             command=_go_settings
