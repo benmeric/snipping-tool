@@ -563,6 +563,23 @@ def get_icon_ctk(name: str, size: tuple[int, int] = (22, 22)) -> ctk.CTkImage:
         d.rounded_rectangle([cx - gap - w_tile, cy + gap, cx - gap, cy + gap + w_tile], radius=1*S, fill=fg)
         d.rounded_rectangle([cx + gap, cy + gap, cx + gap + w_tile, cy + gap + w_tile], radius=1*S, fill=fg)
 
+    elif name == "close":
+        d.line([(cx - 4.5*S, cy - 4.5*S), (cx + 4.5*S, cy + 4.5*S)], fill=fg, width=w)
+        d.line([(cx + 4.5*S, cy - 4.5*S), (cx - 4.5*S, cy + 4.5*S)], fill=fg, width=w)
+
+    elif name == "code":
+        d.line([(cx - 7.5*S, cy), (cx - 3.5*S, cy - 4.5*S)], fill=fg, width=w)
+        d.line([(cx - 7.5*S, cy), (cx - 3.5*S, cy + 4.5*S)], fill=fg, width=w)
+        d.line([(cx - 1*S, cy + 6.5*S), (cx + 1*S, cy - 6.5*S)], fill=fg, width=w)
+        d.line([(cx + 7.5*S, cy), (cx + 3.5*S, cy - 4.5*S)], fill=fg, width=w)
+        d.line([(cx + 7.5*S, cy), (cx + 3.5*S, cy + 4.5*S)], fill=fg, width=w)
+
+    elif name == "format":
+        d.line([(cx - 7*S, cy - 5*S), (cx + 7*S, cy - 5*S)], fill=fg, width=w)
+        d.line([(cx - 2*S, cy), (cx + 7*S, cy)], fill=fg, width=w)
+        d.line([(cx - 2*S, cy + 5*S), (cx + 7*S, cy + 5*S)], fill=fg, width=w)
+        d.line([(cx - 6.5*S, cy - 1*S), (cx - 4.5*S, cy + 2.5*S), (cx - 6.5*S, cy + 6*S)], fill=fg, width=w)
+
 
     res = im.resize(size, Image.Resampling.LANCZOS)
     ctk_img = ctk.CTkImage(light_image=res, dark_image=res, size=size)

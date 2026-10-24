@@ -412,62 +412,8 @@ class SnippingEditorWindow(ctk.CTkToplevel):
         threading.Thread(target=_ocr_thread, daemon=True).start()
 
     def _show_ocr_dialog(self, extracted_text: str):
-        dlg = ctk.CTkToplevel(self)
-        dlg.title(t("ocr_dialog_title"))
-        dlg.geometry("540x420")
-        dlg.minsize(440, 320)
-        dlg.configure(fg_color="#202020")
-        dlg.attributes("-topmost", True)
-
-        header = ctk.CTkFrame(dlg, fg_color="transparent")
-        header.pack(fill=tk.X, padx=16, pady=(16, 8))
-
-        lbl_h = ctk.CTkLabel(
-            header, image=icon_assets.get_icon_ctk("ocr", (20, 20)),
-            text=f"  {t('ocr_extracted_text')}", compound="left",
-            font=ctk.CTkFont(family="Segoe UI", size=15, weight="bold"), text_color="#FFFFFF"
-        )
-        lbl_h.pack(side=tk.LEFT)
-
-        lbl_sub = ctk.CTkLabel(
-            dlg, text=t("ocr_auto_copied_hint"),
-            font=ctk.CTkFont(family="Segoe UI", size=11), text_color="#AAAAAA"
-        )
-        lbl_sub.pack(anchor="w", padx=16, pady=(0, 8))
-
-        txt_box = ctk.CTkTextbox(
-            dlg, fg_color="#181818", border_width=1, border_color="#333333",
-            corner_radius=8, font=ctk.CTkFont(family="Segoe UI", size=13), text_color="#FFFFFF"
-        )
-        txt_box.pack(fill=tk.BOTH, expand=True, padx=16, pady=4)
-        txt_box.insert("1.0", extracted_text)
-
-        bottom_bar = ctk.CTkFrame(dlg, fg_color="transparent")
-        bottom_bar.pack(fill=tk.X, padx=16, pady=14)
-
-        def _copy_again():
-            content = txt_box.get("1.0", "end-1c")
-            self.clipboard_clear()
-            self.clipboard_append(content)
-            btn_copy_all.configure(text=f"✓  {t('copied_toast')}!")
-            dlg.after(1500, lambda: btn_copy_all.configure(text=f"  {t('ocr_copy_all')}"))
-
-        btn_copy_all = ctk.CTkButton(
-            bottom_bar, image=icon_assets.get_icon_ctk("copy", (16, 16)),
-            text=f"  {t('ocr_copy_all')}", compound="left",
-            font=ctk.CTkFont(family="Segoe UI", size=12, weight="bold"),
-            fg_color="#0078D4", hover_color="#0063B1", corner_radius=6, height=34,
-            command=_copy_again
-        )
-        btn_copy_all.pack(side=tk.LEFT)
-
-        btn_close_dlg = ctk.CTkButton(
-            bottom_bar, text=t("btn_close"),
-            font=ctk.CTkFont(family="Segoe UI", size=12),
-            fg_color="#2B2B2B", hover_color="#383838", corner_radius=6, height=34, width=80,
-            command=dlg.destroy
-        )
-        btn_close_dlg.pack(side=tk.RIGHT)
+        from ocr_dialog import OcrResultDialog
+        OcrResultDialog(parent=self, extracted_text=extracted_text)
 
     def _on_new_click(self):
         if config.get("ask_save_edited_snip", False) and len(self.history) > 1 and not self._has_saved:
@@ -1740,6 +1686,8 @@ class EkranAlintisiAraci:
 
         def _open_feedback_dialog():
             fb_win = ctk.CTkToplevel(self.root)
+            icon_assets.apply_window_icon(fb_win)
+            fb_win.after(100, lambda: icon_assets.apply_window_icon(fb_win))
             fb_win.title(t("feedback_title"))
             fb_win.geometry("440x280")
             fb_win.configure(fg_color="#202020")
@@ -1780,8 +1728,74 @@ class EkranAlintisiAraci:
     # 3. KIRPMA VE VİDEO TETİKLEYİCİLERİ
     # =========================================================================
     def _launch_ocr_snip(self):
-        self.snip_mode = "rect"
-        self.on_new_snip()
+        self._close_popup()
+        self.root.withdraw()
+
+        def _on_ocr_snip_completed(cropped_img: Image.Image):
+            self.root.deiconify()
+            self.root.lift()
+            self.root.focus_force()
+            self._process_ocr_from_snip(cropped_img)
+
+        def _on_ocr_cancel():
+            self.root.deiconify()
+            self.root.lift()
+            self.root.focus_force()
+
+        def _trigger():
+            open_snipper(
+                master=self.root,
+                on_completed=_on_ocr_snip_completed,
+                on_cancel=_on_ocr_cancel,
+                mode="rect",
+                is_video=False
+            )
+
+        if self.delay_sec > 0:
+            threading.Timer(self.delay_sec, _trigger).start()
+        else:
+            self.root.after(150, _trigger)
+
+    def _process_ocr_from_snip(self, img: Image.Image):
+        try:
+            self.btn_quick_ocr.configure(state="disabled")
+        except Exception:
+            pass
+
+        try:
+            from notification import toast
+            toast.show(t("app_title"), f"⏳ {t('ocr_quick_toast')}")
+        except Exception:
+            pass
+
+        def _worker():
+            try:
+                text = extract_text_from_image(img)
+                def _finish():
+                    try:
+                        self.btn_quick_ocr.configure(state="normal")
+                    except Exception:
+                        pass
+                    if text and text.strip():
+                        try:
+                            self.root.clipboard_clear()
+                            self.root.clipboard_append(text)
+                        except Exception:
+                            pass
+                        self._show_ocr_dialog(text)
+                    else:
+                        messagebox.showinfo(t("ocr_dialog_title"), t("ocr_no_text"))
+                self.root.after(0, _finish)
+            except Exception as e:
+                def _err():
+                    try:
+                        self.btn_quick_ocr.configure(state="normal")
+                    except Exception:
+                        pass
+                    messagebox.showerror(t("ocr_dialog_title"), str(e))
+                self.root.after(0, _err)
+
+        threading.Thread(target=_worker, daemon=True).start()
 
     def on_new_snip(self):
         if self.is_editor_mode and config.get("ask_save_edited_snip", False) and len(self.history) > 1 and not self._has_saved:
@@ -2261,61 +2275,8 @@ class EkranAlintisiAraci:
         threading.Thread(target=_ocr_thread, daemon=True).start()
 
     def _show_ocr_dialog(self, extracted_text: str):
-        dlg = ctk.CTkToplevel(self.root)
-        dlg.title(t("ocr_dialog_title"))
-        dlg.geometry("540x420")
-        dlg.minsize(440, 320)
-        dlg.configure(fg_color="#202020")
-        dlg.attributes("-topmost", True)
-
-        header = ctk.CTkFrame(dlg, fg_color="transparent")
-        header.pack(fill=tk.X, padx=16, pady=(16, 8))
-
-        lbl_h = ctk.CTkLabel(
-            header, image=icon_assets.get_icon_ctk("ocr", (20, 20)),
-            text=f"  {t('ocr_extracted_text')}", compound="left",
-            font=ctk.CTkFont(family="Segoe UI", size=15, weight="bold"), text_color="#FFFFFF"
-        )
-        lbl_h.pack(side=tk.LEFT)
-
-        lbl_sub = ctk.CTkLabel(
-            dlg, text=t("ocr_auto_copied_hint"),
-            font=ctk.CTkFont(family="Segoe UI", size=11), text_color="#AAAAAA"
-        )
-        lbl_sub.pack(anchor="w", padx=16, pady=(0, 8))
-
-        txt_box = ctk.CTkTextbox(
-            dlg, fg_color="#181818", border_width=1, border_color="#333333",
-            corner_radius=8, font=ctk.CTkFont(family="Segoe UI", size=13), text_color="#FFFFFF"
-        )
-        txt_box.pack(fill=tk.BOTH, expand=True, padx=16, pady=4)
-        txt_box.insert("1.0", extracted_text)
-
-        bottom_bar = ctk.CTkFrame(dlg, fg_color="transparent")
-        bottom_bar.pack(fill=tk.X, padx=16, pady=14)
-
-        def _copy_again():
-            content = txt_box.get("1.0", "end-1c")
-            self.root.clipboard_clear()
-            self.root.clipboard_append(content)
-            btn_copy_all.configure(text=f"✓  {t('copied_toast')}!")
-            dlg.after(1500, lambda: btn_copy_all.configure(text=f"  {t('ocr_copy_all')}"))
-
-        btn_copy_all = ctk.CTkButton(
-            bottom_bar, image=icon_assets.get_icon_ctk("copy", (16, 16)),
-            text=f"  {t('ocr_copy_all')}", compound="left",
-            font=ctk.CTkFont(family="Segoe UI", size=12, weight="bold"),
-            fg_color="#0078D4", hover_color="#0063B1", corner_radius=6, height=34,
-            command=_copy_again
-        )
-        btn_copy_all.pack(side=tk.LEFT)
-
-        btn_close_dlg = ctk.CTkButton(
-            bottom_bar, text=t("btn_close"), font=ctk.CTkFont(family="Segoe UI", size=12),
-            fg_color="#2B2B2B", hover_color="#383838", corner_radius=6, height=34, width=80,
-            command=dlg.destroy
-        )
-        btn_close_dlg.pack(side=tk.RIGHT)
+        from ocr_dialog import OcrResultDialog
+        OcrResultDialog(parent=self.root, extracted_text=extracted_text)
 
     def open_image_combiner(self, initial_images=None):
         """Çoklu görsel birleştirme / kolaj penceresini açar."""

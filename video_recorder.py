@@ -572,6 +572,12 @@ class VideoRecorderController:
 
         dlg.title(t("video_finished_title"))
         dlg.geometry("460x220")
+        try:
+            import icon_assets
+            icon_assets.apply_window_icon(dlg)
+            dlg.after(100, lambda: icon_assets.apply_window_icon(dlg))
+        except Exception:
+            pass
         dlg.resizable(False, False)
         dlg.configure(fg_color="#202020")
         dlg.attributes("-topmost", True)
