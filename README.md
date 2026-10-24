@@ -9,6 +9,11 @@
 </p>
 
 <p align="center">
+  <a href="README.md"><b>English</b></a> | 
+  <a href="README_TR.md"><b>Türkçe</b></a>
+</p>
+
+<p align="center">
   <img src="https://img.shields.io/badge/Platform-Windows%2011%20%7C%2010-0078D4?logo=windows" alt="Platform">
   <img src="https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python" alt="Python">
   <img src="https://img.shields.io/badge/License-MIT-green.svg" alt="License">
