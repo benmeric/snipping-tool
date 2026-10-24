@@ -815,6 +815,9 @@ def apply_window_icon(window):
         ico_path = ensure_app_icon_ico()
         if os.path.exists(ico_path):
             window.iconbitmap(ico_path)
+            # CustomTkinter'ın Windows'ta varsayılan mavi ikonu 200ms sonra tekrar ezmesini engelle
+            if hasattr(window, "_windows_set_titlebar_icon"):
+                window._windows_set_titlebar_icon = lambda: window.iconbitmap(ico_path)
     except Exception:
         pass
 
